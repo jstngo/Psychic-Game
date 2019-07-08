@@ -1,26 +1,28 @@
-var letters = [];
+var userLetters = [];
 
-var newletters = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
-    
-var newletter = newletters[Math.floor(Math.random()*newletters.length)];
+var alphabet = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
 
-console.log(newletter);
+// var newLetter = alphabet[Math.floor(Math.random()*alphabet.length)];
 
-var guessesLeft = 10;
+var newLetter = randomLetter();
+
+console.log(newLetter); 
+
+var guessRemain = 10;
 
 var elGuessesLeft = document.querySelector("#guessesLeft");
 
-elGuessesLeft.innerText = guessesLeft;
+elGuessesLeft.innerText = guessRemain;
 
 var userVal = document.querySelector("#currentGuesses");
 
-userVal.innerText = letters;
+userVal.innerText = userLetters;
 
-var lettersMatch = 0;
+var winScore = 0;
 
 var matchingLetters = document.querySelector("#winTracker");
 
-matchingLetters.innerText = lettersMatch;
+matchingLetters.innerText = winScore;
 
 var lossScore = 0;
 
@@ -28,26 +30,42 @@ var lostOne = document.querySelector("#lossTracker");
 
 lostOne.innerText = lossScore;
 
-function increase(){
-    
-    guessesLeft--;
-    elGuessesLeft.innerText = guessesLeft;
-    // console.log(guessesLeft);
-    letters.push(event.key);
-    userVal.innerText = letters;
-    // document.querySelector("#counter").innerText = 'Your guesses so far: ' + letters;
-    return letters;
-}
+function randomLetter(){
 
-document.onkeyup = increase;
+    return newLetter = alphabet[Math.floor(Math.random()*alphabet.length)];
+    
+  }
+
+document.onloadstart = randomLetter;
+
+function increase(){
+  
+    guessRemain--;
+    elGuessesLeft.innerText = guessRemain;
+    // console.log(guessRemain);
+    if (!userLetters.includes(alphabet)){
+      userLetters.push(event.key);
+    // return letters;
+      userVal.innerText = userLetters;
+      return;
+    }
+}
+document.onkeypress = increase;
+
 
 function match(event) {
     var x = event.key;
 
-    if (x == newletter) { 
-      lettersMatch++;
-      matchingLetters.innerText = lettersMatch;
+    if (x == newLetter) { 
+      winScore++;
+      matchingLetters.innerText = winScore;
+      guessRemain = 11;
+      elGuessesLeft.innerText = guessRemain;
+      userLetters = [];
+      userVal.innerText = userLetters;
       alert ("You did it!");
+      newLetter;
+      randomLetter();
     }
   }
 
@@ -55,12 +73,16 @@ document.onkeydown = match;
 
 function loss(){
     
-      if (guessesLeft == 0) {
-        console.log(guessesLeft);
+      if (guessRemain == 0) {
+        console.log(guessRemain);
         lossScore++;
         lostOne.innerText = lossScore;
+        guessRemain = 10;
+        elGuessesLeft.innerText = guessRemain;
+        userLetters = [];
+        userVal.innerText = userLetters;
         alert ("You lost this round");
-      }
+    }
 }
 
-document.onkeydown = loss;
+document.onkeyup = loss;
